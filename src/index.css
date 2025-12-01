@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cool-50: hsl(0 0% 23.8%);
+  --color-cool-100: hsl(0 0% 19.3%);
+  --color-cool-200: hsl(0 0% 11.6%);
+  --color-cool-800: hsl(0 0% 9%);
+  --color-cool-900: hsl(0 0% 6%);
+
+  --transition-fast: 200ms;
+  --transition-visibility: transform ease-in-out, opacity ease-in-out;
+}
+
+html {
+  @apply touch-manipulation;
+}
+
+body {
+  @apply antialiased grid place-items-center bg-white text-black dark:bg-cool-900 dark:text-white font-sans;
+}
