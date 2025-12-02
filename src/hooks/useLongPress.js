@@ -1,36 +1,36 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useRef } from 'react';
 
 export const useLongTouch = (onLongPress, onClick, { delay = 500 } = {}) => {
-  const timeout = useRef();
-  const longPressTriggered = useRef(false);
+	const timeout = useRef(null);
+	const longPressTriggered = useRef(false);
 
-  const start = useCallback(
-    (event) => {
-      const e = event;
+	const start = useCallback(
+		event => {
+			const e = event;
 
-      timeout.current = setTimeout(() => {
-        longPressTriggered.current = true;
-        onLongPress?.(e);
-      }, delay);
-    },
-    [onLongPress, delay]
-  );
+			timeout.current = setTimeout(() => {
+				longPressTriggered.current = true;
+				onLongPress?.(e);
+			}, delay);
+		},
+		[onLongPress, delay],
+	);
 
-  const clear = useCallback(
-    (event) => {
-      if (timeout.current) clearTimeout(timeout.current);
+	const clear = useCallback(
+		event => {
+			if (timeout.current) clearTimeout(timeout.current);
 
-      if (!longPressTriggered.current) {
-        onClick?.(event);
-      }
+			if (!longPressTriggered.current) {
+				onClick?.(event);
+			}
 
-      longPressTriggered.current = false;
-    },
-    [onClick]
-  );
+			longPressTriggered.current = false;
+		},
+		[onClick],
+	);
 
-  return {
-    onTouchStart: start,
-    onTouchEnd: clear,
-  };
+	return {
+		onTouchStart: start,
+		onTouchEnd: clear,
+	};
 };

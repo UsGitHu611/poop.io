@@ -1,39 +1,44 @@
-import Dexie from "dexie";
+import Dexie from 'dexie';
+
+export const SORT_TITLE_FIELD = 'title';
+export const SORT_DATE_FIELD = 'createdAt';
 
 class Notes extends Dexie {
-  notes;
-  constructor() {
-    super("notes");
-    this.version(1).stores({
-      notes: "++id, title, description, createdAt",
-    });
-    this.notes = this.table("notes");
-  }
-  async add(title, description) {
-    await this.notes.add({
-      title,
-      description,
-      createdAt: new Date().toLocaleDateString("ru-RU", {
-        day: "2-digit",
-        month: "numeric",
-        year: "2-digit",
-      }),
-    });
-  }
+	notes;
+	constructor() {
+		super('notes');
+		this.version(1).stores({
+			notes: '++id, title, description, createdAt',
+		});
+		this.notes = this.table('notes');
+	}
+	async add(title, description) {
+		await this.notes.add({
+			title,
+			description,
+			createdAt: new Date().toLocaleDateString('ru-RU', {
+				day: '2-digit',
+				month: 'numeric',
+				year: '2-digit',
+			}),
+		});
+	}
 
-  async update(id, updateValue) {
-    console.log(updateValue);
+	async getSortedNotes(value) {
+		return this.notes.orderBy(value).toArray();
+	}
 
-    await this.notes.update(id, updateValue);
-  }
+	async update(id, updateValue) {
+		await this.notes.update(id, updateValue);
+	}
 
-  async removeById(id) {
-    await this.notes.delete(id);
-  }
+	async removeById(id) {
+		await this.notes.delete(id);
+	}
 
-  async clearAll() {
-    await this.notes.clear();
-  }
+	async clearAll() {
+		await this.notes.clear();
+	}
 }
 
 export const db = new Notes();

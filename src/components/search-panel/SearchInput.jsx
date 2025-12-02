@@ -1,17 +1,26 @@
 import { Icon } from '@iconify/react';
 import { clsx } from 'clsx';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useContext } from 'react';
 import { isMobile } from '@lib/isMobile';
+import { searchContext } from '@/context/SearchContextProvider';
 
 export const SearchInput = () => {
 	const inputRef = useRef(null);
+	const { inputValue, setInputValue } = useContext(searchContext);
+
 	useEffect(() => {
 		const abortController = new AbortController();
 		window.addEventListener(
 			'keydown',
 			({ key, ctrlKey }) => {
 				if ((key === '/' || key === '.') && ctrlKey) {
-					inputRef.current.focus();
+					const activeElement = document.activeElement;
+					const isInput =
+						activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA';
+
+					if (!isInput) {
+						inputRef.current.focus();
+					}
 				}
 			},
 			{ signal: abortController.signal },
@@ -21,11 +30,12 @@ export const SearchInput = () => {
 			abortController.abort();
 		};
 	}, []);
+
 	return (
 		<div
 			className={clsx(
 				'grid items-center rounded-2xl outline-2 outline-transparent',
-				'bg-cool-200 grid-cols-[auto_1fr_auto] has-focus-within:outline-cool-50',
+				'bg-cool-200 grid-cols-[auto_minmax(0,1fr)_auto] has-focus-within:outline-cool-50',
 				'text-lg w-full md:grow-0 md:basis-1/5 duration-130 ease-out',
 				'md:has-focus-within:grow hover:bg-cool-50',
 			)}
@@ -36,7 +46,9 @@ export const SearchInput = () => {
 			<input
 				className={clsx('outline-none w-full h-full', 'pe-3 py-3')}
 				placeholder="Введите название.."
-				type="text"
+				value={inputValue}
+				onChange={e => setInputValue(e.target.value)}
+				type="search"
 				ref={inputRef}
 			/>
 			{!isMobile ? (
