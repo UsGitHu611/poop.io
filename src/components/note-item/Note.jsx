@@ -1,5 +1,4 @@
 import { clsx } from 'clsx';
-import { Checkbox } from '../checkbox/Checkbox';
 import { useLongTouch } from '../../hooks/useLongPress';
 import { motion } from 'motion/react';
 import { Icon } from '@iconify/react';
@@ -8,10 +7,12 @@ import { db } from '@/lib/Notes';
 import { NavLink } from 'react-router';
 import { VIEW_PAGE, VIEW_TITLE, VIEW_DESCRIPTION } from '@/constants/viewTransitionNames';
 import { useEffect, useRef, forwardRef } from 'react';
+import { formattingDate } from '../../helper/formattingDate';
 
 export const Note = forwardRef(
-	({ id, title, description, createdAt, isSelected, onToggle }, ref) => {
+	({ id, title, description, createdAt, isSelected, onToggle, isSelectionMode }, ref) => {
 		const textRef = useRef(null);
+		const formatedDate = formattingDate(createdAt);
 
 		useEffect(() => {
 			if (ref && ref.current && textRef.current) {
@@ -22,16 +23,21 @@ export const Note = forwardRef(
 			}
 		}, [id, ref]);
 
-		const handleClick = () => {
-			onToggle(id);
+		const handleClick = e => {
+			if (isSelectionMode) {
+				e?.stopPropagation();
+				e?.preventDefault();
+				onToggle(id);
+			}
 		};
 
 		const handleLongPress = e => {
+			e?.stopPropagation();
+			e?.preventDefault();
 			if (typeof navigator !== 'undefined' && navigator.vibrate) {
 				navigator.vibrate(50);
 			}
 			onToggle(id);
-			e?.stopPropagation();
 		};
 
 		const deleteOneById = async () => {
@@ -44,9 +50,9 @@ export const Note = forwardRef(
 			<motion.li
 				{...bind}
 				className={clsx(
-					'relative group rounded-2xl flex flex-col',
-					'select-none cursor-pointer bg-cool-200',
-					isSelected ? 'outline-blue-500' : 'outline-transparent hover:outline-cool-50',
+					'group relative flex flex-col rounded-2xl',
+					'bg-cool-200 cursor-pointer select-none',
+					isSelected ? 'outline-blue-500' : 'hover:outline-cool-50 outline-transparent',
 					'outline-2',
 				)}
 				initial={{
@@ -64,6 +70,11 @@ export const Note = forwardRef(
 				whileHover={{
 					scale: 1.035,
 				}}
+				onContextMenu={e => {
+					if (isMobile) {
+						e.preventDefault();
+					}
+				}}
 				layout
 			>
 				<NavLink
@@ -79,14 +90,14 @@ export const Note = forwardRef(
 					{({ isTransitioning }) => (
 						<>
 							<div
-								className="flex justify-between items-start mb-2"
+								className="mb-2 flex items-start justify-between"
 								style={{
 									viewTransitionName: isTransitioning ? VIEW_PAGE : '',
 								}}
 							>
 								<h2
 									title={title}
-									className="capitalize text-xl break-all truncate w-fit"
+									className="w-fit truncate text-xl break-all capitalize"
 									style={{
 										viewTransitionName: isTransitioning ? VIEW_TITLE : '',
 									}}
@@ -94,17 +105,10 @@ export const Note = forwardRef(
 								>
 									{title}
 								</h2>
-
-								{isMobile ? (
-									<Checkbox checked={isSelected} onChange={() => onToggle(id)} />
-								) : null}
 							</div>
 
 							<p
-								className={clsx(
-									'truncate max-w-prose text-gray-600',
-									'dark:text-gray-300 mb-3 whitespace-pre-wrap',
-								)}
+								className="mb-3 truncate text-gray-600 dark:text-gray-300"
 								style={{
 									viewTransitionName: isTransitioning ? VIEW_DESCRIPTION : '',
 								}}
@@ -113,12 +117,12 @@ export const Note = forwardRef(
 							</p>
 
 							{!isMobile ? (
-								<div className="flex justify-between items-center">
+								<div className="flex items-center justify-between">
 									<div
 										className={clsx(
-											'flex items-center origin-bottom scale-0 opacity-0',
+											'flex origin-bottom scale-0 items-center opacity-0',
 											'group-hover:scale-100 group-hover:opacity-100',
-											'transition-visibility duration-200 gap-1',
+											'transition-visibility gap-1 duration-200',
 										)}
 									>
 										<button
@@ -150,10 +154,12 @@ export const Note = forwardRef(
 											/>
 										</button>
 									</div>
-									<span className="text-[hsl(0_0%_46%)] text-sm">{createdAt}</span>
+									<span className="text-sm text-[hsl(0_0%_46%)]">{formatedDate}</span>
 								</div>
 							) : (
-								<span className="text-[hsl(0_0%_46%)] text-sm ml-auto">{createdAt}</span>
+								<span className="ml-auto text-sm text-[hsl(0_0%_46%)]">
+									{formatedDate}
+								</span>
 							)}
 						</>
 					)}

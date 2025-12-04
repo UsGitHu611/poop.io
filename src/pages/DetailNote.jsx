@@ -35,29 +35,29 @@ export default function DetailNote() {
 
 	return (
 		<section
-			className="bg-cool-200 block md:flex md:justify-center h-screen w-dvw"
+			className="bg-cool-200 block h-screen w-dvw md:flex md:justify-center"
 			style={{
 				viewTransitionName: VIEW_PAGE,
 			}}
 		>
-			<div className="h-screen md:block md:pl-0 w-dvw md:w-[60%] p-6">
+			<div className="h-screen w-dvw p-6 md:block md:w-[60%] md:pl-0">
 				<div
 					className={clsx(
-						'grid grid-cols-[auto_1fr] gap-x-3 gap-y-5 place-items-baseline',
+						'grid grid-cols-[auto_1fr] place-items-baseline gap-x-3 gap-y-5',
 						'mb-4',
 					)}
 				>
 					<button
 						className={clsx(
-							'rounded-full hover:bg-gray-400/20 cursor-pointer',
-							'size-15 flex items-center justify-center active:bg-gray-400/20',
+							'cursor-pointer rounded-full hover:bg-gray-400/20',
+							'flex size-15 items-center justify-center active:bg-gray-400/20',
 						)}
 						onClick={() => router('/')}
 					>
 						<Icon icon="ic:baseline-arrow-back" width={28} />
 					</button>
 					<h2
-						className="capitalize text-5xl md:text-6xl break-all outline-none w-fit"
+						className="w-fit text-5xl break-all capitalize outline-none md:text-6xl"
 						style={{
 							viewTransitionName: VIEW_TITLE,
 						}}
@@ -69,9 +69,10 @@ export default function DetailNote() {
 					</h2>
 				</div>
 				<p
+					lang="ru"
 					className={clsx(
-						'text-gray-600 text-xl dark:text-gray-300 break-all',
-						'w-fit outline-none',
+						'text-xl text-gray-600 dark:text-gray-300',
+						'w-fit hyphens-auto outline-none',
 					)}
 					style={{
 						viewTransitionName: VIEW_DESCRIPTION,

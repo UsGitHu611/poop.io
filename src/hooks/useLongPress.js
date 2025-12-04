@@ -7,6 +7,7 @@ export const useLongTouch = (onLongPress, onClick, { delay = 500 } = {}) => {
 	const start = useCallback(
 		event => {
 			const e = event;
+			event.preventDefault();
 
 			timeout.current = setTimeout(() => {
 				longPressTriggered.current = true;
@@ -32,5 +33,9 @@ export const useLongTouch = (onLongPress, onClick, { delay = 500 } = {}) => {
 	return {
 		onTouchStart: start,
 		onTouchEnd: clear,
+		onTouchMove: () => {
+			if (timeout.current) clearTimeout(timeout.current);
+			longPressTriggered.current = false;
+		},
 	};
 };

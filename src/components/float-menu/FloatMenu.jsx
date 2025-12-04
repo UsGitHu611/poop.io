@@ -9,6 +9,7 @@ import { ModalButton } from '../modal/ModalButton';
 import { db } from '@/lib/Notes';
 import { SelectedContext } from '@context/SelectedContextProvider';
 import { ContextMenu } from '../context-menu/ContextMenu';
+import { clsx } from 'clsx';
 
 export const FloatMenu = () => {
 	const [showMenu, setShowMenu] = useState(false);
@@ -30,14 +31,14 @@ export const FloatMenu = () => {
 	};
 
 	return (
-		<div className="fixed right-5 bottom-5 gap-3 flex items-center">
+		<div className="fixed right-5 bottom-5 flex items-center gap-1">
 			<AnimatePresence>
 				{isSelectionMode ? (
 					<ContextMenu selectedIds={selectedIds} setSelectedIds={setSelectedIds} />
 				) : null}
 			</AnimatePresence>
 			<div
-				className="flex flex-col gap-3"
+				className="flex flex-col gap-1"
 				role="toolbar"
 				aria-label="Floating menu"
 				onClick={() => setShowMenu(prev => !prev)}
@@ -70,19 +71,19 @@ export const FloatMenu = () => {
 						</motion.menu>
 					) : null}
 				</AnimatePresence>
-				<Button classNames="rounded-full dark:bg-cool-200">
+				<Button classNames="rounded-full bg-violet-500">
 					<Icon icon="ic:outline-menu" />
 				</Button>
 
 				<AnimatePresence>
 					{showModal ? (
 						<Modal showModalHandler={showModalHandler}>
-							<div className="flex flex-col p-3 h-full">
-								<p className="text-pretty text-2xl flex-1 select-none">
+							<div className="flex h-full flex-col p-3">
+								<p className="flex-1 text-2xl text-pretty select-none">
 									Вы уверены, что хотите
 									<span className="text-red-600 uppercase"> удалить</span> все заметки?
 								</p>
-								<div className="flex gap-3 w-full">
+								<div className="flex w-full gap-3">
 									<ModalButton color="bg-cool-50" onClick={rejectHandler}>
 										Нет
 									</ModalButton>

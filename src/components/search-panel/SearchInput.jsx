@@ -1,12 +1,13 @@
 import { Icon } from '@iconify/react';
 import { clsx } from 'clsx';
-import { useRef, useEffect, useContext } from 'react';
+import { useRef, useEffect, useContext, useId } from 'react';
 import { isMobile } from '@lib/isMobile';
 import { searchContext } from '@/context/SearchContextProvider';
 
 export const SearchInput = () => {
 	const inputRef = useRef(null);
 	const { inputValue, setInputValue } = useContext(searchContext);
+	const id = useId();
 
 	useEffect(() => {
 		const abortController = new AbortController();
@@ -35,16 +36,17 @@ export const SearchInput = () => {
 		<div
 			className={clsx(
 				'grid items-center rounded-2xl outline-2 outline-transparent',
-				'bg-cool-200 grid-cols-[auto_minmax(0,1fr)_auto] has-focus-within:outline-cool-50',
-				'text-lg w-full md:grow-0 md:basis-1/5 duration-130 ease-out',
-				'md:has-focus-within:grow hover:bg-cool-50',
+				'bg-cool-200 has-focus-within:outline-cool-50 grid-cols-[auto_minmax(0,1fr)_auto]',
+				'w-full text-lg duration-130 ease-out md:grow-0 md:basis-1/5',
+				'hover:bg-cool-50 md:has-focus-within:grow',
 			)}
 		>
 			<div className="flex px-4">
 				<Icon className="opacity-50" icon="ic:baseline-search" width={24} />
 			</div>
 			<input
-				className={clsx('outline-none w-full h-full', 'pe-3 py-3')}
+				id={id}
+				className="h-full w-full py-3 pe-3 outline-none"
 				placeholder="Введите название.."
 				value={inputValue}
 				onChange={e => setInputValue(e.target.value)}
@@ -52,11 +54,11 @@ export const SearchInput = () => {
 				ref={inputRef}
 			/>
 			{!isMobile ? (
-				<div className="pe-4 py-3 flex">
-					<kbd className="bg-cool-100 leading-normal rounded-lg text-[12px] p-1.5">
+				<label className="flex py-3 pe-4" htmlFor={id}>
+					<kbd className="bg-cool-100 rounded-lg p-1.5 text-[12px] leading-normal">
 						ctrl + /
 					</kbd>
-				</div>
+				</label>
 			) : null}
 		</div>
 	);

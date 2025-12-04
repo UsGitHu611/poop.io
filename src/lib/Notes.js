@@ -16,11 +16,7 @@ class Notes extends Dexie {
 		await this.notes.add({
 			title,
 			description,
-			createdAt: new Date().toLocaleDateString('ru-RU', {
-				day: '2-digit',
-				month: 'numeric',
-				year: '2-digit',
-			}),
+			createdAt: Date.now(),
 		});
 	}
 

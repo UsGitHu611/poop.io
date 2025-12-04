@@ -7,7 +7,7 @@ export const useHighlight = debounceValue => {
 
 	useEffect(() => {
 		const map = noteItemsMap.current;
-		const trimValue = debounceValue.trim();
+		const trimValue = debounceValue.trim().toLowerCase();
 		const ranges = [];
 
 		if (trimValue.length === 0) {
@@ -17,7 +17,7 @@ export const useHighlight = debounceValue => {
 
 		for (const [_, text] of map) {
 			if (text) {
-				const fullText = text.textContent || '';
+				const fullText = text.textContent.toLowerCase() || '';
 				const startIndex = fullText.indexOf(trimValue);
 
 				if (startIndex !== -1) {

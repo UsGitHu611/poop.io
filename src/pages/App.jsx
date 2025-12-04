@@ -6,7 +6,7 @@ import { SearchContextProvider } from '../context/SearchContextProvider';
 
 export default function App() {
 	return (
-		<div className="w-screen flex flex-col h-screen gap-3 p-4">
+		<div className="flex min-h-screen w-full flex-col gap-3 p-4 md:w-[90dvw]">
 			<SelectedContextProvider>
 				<SearchContextProvider>
 					<SearchPanel />
