@@ -31,7 +31,7 @@ export const FloatMenu = () => {
 	};
 
 	return (
-		<div className="fixed right-5 bottom-5 flex items-center gap-1">
+		<div className="fixed right-5 bottom-5 flex items-center gap-1 text-white">
 			<AnimatePresence>
 				{isSelectionMode ? (
 					<ContextMenu selectedIds={selectedIds} setSelectedIds={setSelectedIds} />
@@ -79,7 +79,7 @@ export const FloatMenu = () => {
 					{showModal ? (
 						<Modal showModalHandler={showModalHandler}>
 							<div className="flex h-full flex-col p-3">
-								<p className="flex-1 text-2xl text-pretty select-none">
+								<p className="flex-1 text-2xl text-pretty text-black select-none dark:text-white">
 									Вы уверены, что хотите
 									<span className="text-red-600 uppercase"> удалить</span> все заметки?
 								</p>

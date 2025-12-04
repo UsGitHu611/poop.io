@@ -50,9 +50,11 @@ export const Note = forwardRef(
 			<motion.li
 				{...bind}
 				className={clsx(
-					'group relative flex flex-col rounded-2xl',
-					'bg-cool-200 cursor-pointer select-none',
-					isSelected ? 'outline-blue-500' : 'hover:outline-cool-50 outline-transparent',
+					'group relative flex flex-col rounded-2xl dark:text-white',
+					'dark:bg-cool-200 cursor-pointer bg-blue-200 select-none',
+					isSelected
+						? 'dark:outline-blue-500'
+						: 'dark:hover:outline-cool-50 outline-transparent',
 					'outline-2',
 				)}
 				initial={{
@@ -108,7 +110,7 @@ export const Note = forwardRef(
 							</div>
 
 							<p
-								className="mb-3 truncate text-gray-600 dark:text-gray-300"
+								className="mb-3 truncate dark:text-gray-300"
 								style={{
 									viewTransitionName: isTransitioning ? VIEW_DESCRIPTION : '',
 								}}
@@ -154,7 +156,9 @@ export const Note = forwardRef(
 											/>
 										</button>
 									</div>
-									<span className="text-sm text-[hsl(0_0%_46%)]">{formatedDate}</span>
+									<span className="text-sm dark:text-[hsl(0_0%_46%)]">
+										{formatedDate}
+									</span>
 								</div>
 							) : (
 								<span className="ml-auto text-sm text-[hsl(0_0%_46%)]">

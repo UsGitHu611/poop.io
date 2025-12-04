@@ -6,14 +6,14 @@ import { searchContext } from '../../context/SearchContextProvider';
 
 const buttonStyle = clsx(
 	'aspect-square flex items-center justify-center h-full size-15',
-	'rounded-full bg-cool-100 cursor-pointer hover:brightness-125',
+	'rounded-full dark:bg-cool-100 cursor-pointer hover:brightness-95 dark:hover:brightness-125',
 );
 
 export const SortPanel = memo(() => {
 	const { selectSort, selectHandler } = useContext(searchContext);
 	return (
 		<button
-			className={clsx(buttonStyle, 'flex', selectSort ? 'bg-blue-600!' : '')}
+			className={clsx(buttonStyle, 'flex bg-blue-200', selectSort ? 'bg-blue-500!' : '')}
 			onClick={() => selectHandler(SORT_DATE_FIELD)}
 			title="Сортировать по дате"
 			key="sort"

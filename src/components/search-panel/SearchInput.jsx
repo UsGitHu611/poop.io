@@ -36,9 +36,9 @@ export const SearchInput = () => {
 		<div
 			className={clsx(
 				'grid items-center rounded-2xl outline-2 outline-transparent',
-				'bg-cool-200 has-focus-within:outline-cool-50 grid-cols-[auto_minmax(0,1fr)_auto]',
-				'w-full text-lg duration-130 ease-out md:grow-0 md:basis-1/5',
-				'hover:bg-cool-50 md:has-focus-within:grow',
+				'dark:bg-cool-200 dark:has-focus-within:outline-cool-50 grid-cols-[auto_minmax(0,1fr)_auto] bg-blue-200',
+				'w-full text-lg duration-130 ease-out has-focus-within:outline-blue-500 md:grow-0 md:basis-1/5',
+				'dark:hover:bg-cool-50 hover:brightness-95 md:has-focus-within:grow',
 			)}
 		>
 			<div className="flex px-4">
@@ -55,7 +55,7 @@ export const SearchInput = () => {
 			/>
 			{!isMobile ? (
 				<label className="flex py-3 pe-4" htmlFor={id}>
-					<kbd className="bg-cool-100 rounded-lg p-1.5 text-[12px] leading-normal">
+					<kbd className="dark:bg-cool-100 rounded-lg bg-blue-100 p-1.5 text-[12px] leading-normal">
 						ctrl + /
 					</kbd>
 				</label>

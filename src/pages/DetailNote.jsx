@@ -35,7 +35,7 @@ export default function DetailNote() {
 
 	return (
 		<section
-			className="bg-cool-200 block h-screen w-dvw md:flex md:justify-center"
+			className="dark:bg-cool-200 block h-screen w-dvw bg-blue-200 md:flex md:justify-center"
 			style={{
 				viewTransitionName: VIEW_PAGE,
 			}}
@@ -71,7 +71,7 @@ export default function DetailNote() {
 				<p
 					lang="ru"
 					className={clsx(
-						'text-xl text-gray-600 dark:text-gray-300',
+						'text-xl dark:text-gray-300',
 						'w-fit hyphens-auto outline-none',
 					)}
 					style={{
