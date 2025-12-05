@@ -7,27 +7,27 @@ import { readFileSync } from 'fs';
 
 export default defineConfig(({ mode }) => {
 	const env = loadEnv(mode, process.cwd(), '');
+	const isDev = mode === 'development';
 	return {
 		base: '/',
 		clearScreen: false,
-		server:
-			mode === 'development'
-				? {
+		server: isDev
+			? {
+					host: env.VITE_DEV_HOST,
+					port: 5173,
+					cors: true,
+					https: {
+						key: readFileSync(env.VITE_KEY_PEM),
+						cert: readFileSync(env.VITE_PEM),
+					},
+					allowedHosts: true,
+					hmr: {
 						host: env.VITE_DEV_HOST,
-						port: 5173,
-						cors: true,
-						https: {
-							key: readFileSync(env.VITE_KEY_PEM),
-							cert: readFileSync(env.VITE_PEM),
-						},
-						allowedHosts: true,
-						hmr: {
-							host: env.VITE_DEV_HOST,
-							protocol: 'wss',
-							clientPort: 5173,
-						},
-					}
-				: undefined,
+						protocol: 'wss',
+						clientPort: 5173,
+					},
+				}
+			: undefined,
 		resolve: {
 			alias: {
 				'@': resolve(__dirname, './src'),
@@ -42,7 +42,13 @@ export default defineConfig(({ mode }) => {
 		plugins: [
 			tailwindcss(),
 			react({
-				babel: { plugins: [['babel-plugin-react-compiler', { compilationMode: 'all' }]] },
+				babel: {
+					plugins: [
+						...(mode === 'production'
+							? [['babel-plugin-react-compiler', { target: '19' }]]
+							: []),
+					],
+				},
 			}),
 			VitePWA({
 				registerType: 'autoUpdate',

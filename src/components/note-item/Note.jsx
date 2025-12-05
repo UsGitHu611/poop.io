@@ -10,7 +10,19 @@ import { useEffect, useRef, forwardRef } from 'react';
 import { formattingDate } from '../../helper/formattingDate';
 
 export const Note = forwardRef(
-	({ id, title, description, createdAt, isSelected, onToggle, isSelectionMode }, ref) => {
+	(
+		{
+			id,
+			title,
+			description,
+			createdAt,
+			isSelected,
+			onToggle,
+			isSelectionMode,
+			setSelectedIds,
+		},
+		ref,
+	) => {
 		const textRef = useRef(null);
 		const formatedDate = formattingDate(createdAt);
 
@@ -42,6 +54,9 @@ export const Note = forwardRef(
 
 		const deleteOneById = async () => {
 			await db.removeById(id);
+			if (isSelected) {
+				setSelectedIds(prev => prev.filter(n => n !== id));
+			}
 		};
 
 		const bind = useLongTouch(handleLongPress, handleClick);

@@ -9,7 +9,6 @@ import { ModalButton } from '../modal/ModalButton';
 import { db } from '@/lib/Notes';
 import { SelectedContext } from '@context/SelectedContextProvider';
 import { ContextMenu } from '../context-menu/ContextMenu';
-import { clsx } from 'clsx';
 
 export const FloatMenu = () => {
 	const [showMenu, setShowMenu] = useState(false);

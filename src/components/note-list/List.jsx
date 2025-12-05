@@ -1,5 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { memo, useCallback, useContext } from 'react';
+import { memo, useContext } from 'react';
 import { db, SORT_DATE_FIELD } from '../../lib/Notes';
 import { Note } from '../note-item/Note';
 import { clsx } from 'clsx';
@@ -9,7 +9,7 @@ import { searchContext } from '../../context/SearchContextProvider';
 import { EmptyList } from './EmptyList';
 
 export const List = memo(() => {
-	const { selectSort, noteItemsMap } = useContext(searchContext);
+	const { selectSort, noteItemsMap, newInputValue } = useContext(searchContext);
 	const { selectedIds, isSelectionMode, setSelectedIds } = useContext(SelectedContext);
 
 	const notes = useLiveQuery(async () => {
@@ -22,7 +22,11 @@ export const List = memo(() => {
 		return collection.reverse().toArray();
 	}, [selectSort]);
 
-	const toggleSelection = useCallback(id => {
+	const filteredNotes = notes?.filter(note =>
+		note.title.toLowerCase().includes(newInputValue.trim().toLowerCase()),
+	);
+
+	const toggleSelection = id => {
 		setSelectedIds(prev => {
 			if (prev.includes(id)) {
 				return prev.filter(itemId => itemId !== id);
@@ -30,10 +34,14 @@ export const List = memo(() => {
 				return [...prev, id];
 			}
 		});
-	}, []);
+	};
 
 	if (!notes?.length) {
-		return <EmptyList />;
+		return <EmptyList text="Добавьте" />;
+	}
+
+	if (!filteredNotes?.length) {
+		return <EmptyList text="Нетю" />;
 	}
 
 	return (
@@ -45,13 +53,14 @@ export const List = memo(() => {
 					'place-content-start content-start',
 				)}
 			>
-				{notes?.map(note => (
+				{filteredNotes?.map(note => (
 					<Note
 						key={note.id}
 						id={note.id}
 						{...note}
 						isSelected={selectedIds.includes(note.id)}
 						isSelectionMode={isSelectionMode}
+						setSelectedIds={setSelectedIds}
 						onToggle={toggleSelection}
 						ref={noteItemsMap}
 					/>
