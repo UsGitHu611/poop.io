@@ -6,9 +6,9 @@ export const EmptyList = ({ text }) => {
 		<li
 			key="empty-message"
 			className={clsx(
-				'absolute inset-1/2 h-fit w-fit -translate-1/2',
+				'block h-fit w-full flex-1 select-none',
 				'text-cool-50 pointer-events-none text-4xl',
-				'grid grid-cols-[auto_auto] place-items-center gap-2',
+				'flex items-center justify-center gap-2',
 			)}
 		>
 			{text}

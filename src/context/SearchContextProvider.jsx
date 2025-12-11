@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useMemo } from 'react';
 import { useHighlight } from '@/hooks/useHighlight';
 import { useDebounce } from '../hooks/useDebounce';
 
@@ -22,14 +22,17 @@ export const SearchContextProvider = ({ children }) => {
 		setSelectSort(prev => (prev === value ? '' : value));
 	};
 
-	const contextValue = {
-		selectSort,
-		selectHandler,
-		noteItemsMap,
-		newInputValue,
-		setInputValue,
-		inputValue,
-	};
+	const contextValue = useMemo(
+		() => ({
+			selectSort,
+			selectHandler,
+			noteItemsMap,
+			newInputValue,
+			setInputValue,
+			inputValue,
+		}),
+		[selectSort, noteItemsMap, newInputValue, inputValue],
+	);
 
 	return <searchContext.Provider value={contextValue}>{children}</searchContext.Provider>;
 };

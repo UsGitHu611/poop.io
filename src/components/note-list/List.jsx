@@ -1,30 +1,42 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { memo, useContext } from 'react';
-import { db, SORT_DATE_FIELD } from '../../lib/Notes';
+import { useContext, Children, cloneElement, isValidElement } from 'react';
+import { db, SORT_DATE_FIELD, PAGE_SIZE } from '@lib/Notes';
 import { Note } from '../note-item/Note';
 import { clsx } from 'clsx';
 import { AnimatePresence } from 'motion/react';
-import { SelectedContext } from '@/context/SelectedContextProvider';
-import { searchContext } from '../../context/SearchContextProvider';
+import { SelectedContext } from '@context/SelectedContextProvider';
+import { searchContext } from '@context/SearchContextProvider';
 import { EmptyList } from './EmptyList';
+import { useSearchParams } from 'react-router';
 
-export const List = memo(() => {
+export const List = ({ children }) => {
 	const { selectSort, noteItemsMap, newInputValue } = useContext(searchContext);
 	const { selectedIds, isSelectionMode, setSelectedIds } = useContext(SelectedContext);
+	const [searchParams] = useSearchParams();
+	const page = parseInt(searchParams.get('page') || '1');
 
-	const notes = useLiveQuery(async () => {
-		let collection = db.notes.toCollection();
+	const data = useLiveQuery(async () => {
+		let notes = await db.notes.toArray();
 
 		if (selectSort === SORT_DATE_FIELD) {
-			collection = db.notes.orderBy(SORT_DATE_FIELD);
+			notes = notes.sort((a, b) => b.date - a.date);
 		}
 
-		return collection.reverse().toArray();
-	}, [selectSort]);
+		if (newInputValue.trim()) {
+			const lower = newInputValue.toLowerCase();
+			notes = notes.filter(n => n.title.toLowerCase().includes(lower));
+		}
 
-	const filteredNotes = notes?.filter(note =>
-		note.title.toLowerCase().includes(newInputValue.trim().toLowerCase()),
-	);
+		const totalCount = notes.length;
+
+		if (!newInputValue.trim()) {
+			notes = notes.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+		}
+
+		return { notes, totalCount };
+	}, [selectSort, page, newInputValue]);
+
+	const { notes = [], totalCount = 0 } = data || {};
 
 	const toggleSelection = id => {
 		setSelectedIds(prev => {
@@ -36,36 +48,36 @@ export const List = memo(() => {
 		});
 	};
 
-	if (!notes?.length) {
-		return <EmptyList text="Добавьте" />;
-	}
-
-	if (!filteredNotes?.length) {
-		return <EmptyList text="Нетю" />;
-	}
-
 	return (
-		<AnimatePresence>
-			<ul
-				className={clsx(
-					'grid grid-cols-2 md:grid-cols-5',
-					'peer w-full flex-1 gap-3 md:gap-4',
-					'place-content-start content-start',
-				)}
-			>
-				{filteredNotes?.map(note => (
-					<Note
-						key={note.id}
-						id={note.id}
-						{...note}
-						isSelected={selectedIds.includes(note.id)}
-						isSelectionMode={isSelectionMode}
-						setSelectedIds={setSelectedIds}
-						onToggle={toggleSelection}
-						ref={noteItemsMap}
-					/>
-				))}
-			</ul>
-		</AnimatePresence>
+		<>
+			{totalCount === 0 ? (
+				<EmptyList text={newInputValue ? 'Нетю' : 'Добавьте'} />
+			) : (
+				<AnimatePresence>
+					<ul
+						className={clsx(
+							'grid grid-cols-2 md:grid-cols-4',
+							'peer w-full flex-1 gap-3 md:gap-4',
+							'place-content-start content-start',
+						)}
+					>
+						{notes?.map(note => (
+							<Note
+								key={note.id}
+								id={note.id}
+								{...note}
+								isSelected={selectedIds.includes(note.id)}
+								isSelectionMode={isSelectionMode}
+								setSelectedIds={setSelectedIds}
+								onToggle={toggleSelection}
+								ref={noteItemsMap}
+							/>
+						))}
+					</ul>
+				</AnimatePresence>
+			)}
+
+			{children({ totalCount })}
+		</>
 	);
-});
+};

@@ -25,6 +25,13 @@ input[type='search']::-webkit-search-cancel-button {
 	background-position: center;
 }
 
+@layer components {
+	.grid-subgrid {
+		grid-template-columns: subgrid;
+		grid-column: 1 / -1;
+	}
+}
+
 html {
 	@apply touch-manipulation;
 }

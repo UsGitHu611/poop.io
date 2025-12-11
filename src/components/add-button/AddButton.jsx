@@ -1,17 +1,21 @@
 import { db } from '@/lib/Notes';
-import { Button } from '../button/Button';
 import { Icon } from '@iconify/react';
+import { clsx } from 'clsx';
 
 export const AddButton = () => {
 	const addNote = async () => {
 		await db.add('Без названия', 'Без названия');
 	};
 	return (
-		<Button
-			classNames="bg-blue-600 transition-filter duration-300 filter hover:brightness-125"
+		<button
+			className={clsx(
+				'transition-filter size-15 bg-blue-500 filter duration-300 md:size-17',
+				'flex items-center justify-center rounded-full text-2xl hover:brightness-125',
+				'cursor-pointer',
+			)}
 			onClick={addNote}
 		>
 			<Icon icon="ic:baseline-plus" />
-		</Button>
+		</button>
 	);
 };

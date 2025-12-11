@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import { useLongTouch } from '../../hooks/useLongPress';
+import { useLongTouch } from '@hooks/useLongPress';
 import { motion } from 'motion/react';
 import { Icon } from '@iconify/react';
 import { isMobile } from '@/lib/isMobile';
@@ -95,7 +95,7 @@ export const Note = forwardRef(
 				layout
 			>
 				<NavLink
-					className="p-4"
+					className="flex h-full flex-col p-4"
 					to={`/${id}`}
 					viewTransition
 					state={{
@@ -125,7 +125,7 @@ export const Note = forwardRef(
 							</div>
 
 							<p
-								className="mb-3 truncate dark:text-gray-300"
+								className="mb-3 line-clamp-3 min-h-[3lh] flex-1 dark:text-gray-300"
 								style={{
 									viewTransitionName: isTransitioning ? VIEW_DESCRIPTION : '',
 								}}

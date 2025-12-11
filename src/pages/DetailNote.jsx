@@ -52,7 +52,7 @@ export default function DetailNote() {
 							'cursor-pointer rounded-full hover:bg-gray-400/20',
 							'flex size-15 items-center justify-center active:bg-gray-400/20',
 						)}
-						onClick={() => router('/')}
+						onClick={() => router(-1)}
 					>
 						<Icon icon="ic:baseline-arrow-back" width={28} />
 					</button>

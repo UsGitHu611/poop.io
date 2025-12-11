@@ -1,7 +1,9 @@
 import Dexie from 'dexie';
+import { isMobile } from './isMobile';
 
 export const SORT_TITLE_FIELD = 'title';
 export const SORT_DATE_FIELD = 'createdAt';
+export const PAGE_SIZE = isMobile ? 4 : 12;
 
 class Notes extends Dexie {
 	notes;

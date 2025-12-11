@@ -3,6 +3,8 @@ import { FloatMenu } from '@components/float-menu/FloatMenu';
 import { SelectedContextProvider } from '@context/SelectedContextProvider';
 import { SearchPanel } from '@components/search-panel/SearchPanel';
 import { SearchContextProvider } from '../context/SearchContextProvider';
+import { Pagination } from '@components/pagination/Pagination';
+import { BottomMenu } from '../components/bottomMenu/BottomMenu';
 
 export default function App() {
 	return (
@@ -10,9 +12,15 @@ export default function App() {
 			<SelectedContextProvider>
 				<SearchContextProvider>
 					<SearchPanel />
-					<List />
+					<List>
+						{({ totalCount }) => (
+							<BottomMenu>
+								<Pagination totalCount={totalCount} />
+								<FloatMenu />
+							</BottomMenu>
+						)}
+					</List>
 				</SearchContextProvider>
-				<FloatMenu />
 			</SelectedContextProvider>
 		</div>
 	);
